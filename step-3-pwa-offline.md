@@ -22,6 +22,8 @@ In this step:
 
 ## Part 1: Configure PWA Plugin
 
+> 💡 **PWA Benefits:** Native app-like experience with 3x higher engagement. Service workers enable offline functionality, background sync, and push notifications. [PWA statistics →](https://web.dev/articles/what-are-pwas)
+
 Update your Vite configuration for PWA support:
 
 > **🤖 Continue Prompt:**
@@ -85,6 +87,12 @@ Create a simple SVG icon:
 
 ## Part 3: Implement Service Worker
 
+> 💡 **Caching Strategies:**
+> - **Cache-First:** Static assets (CSS, JS) - serves instantly from cache
+> - **Network-First:** Dynamic content - ensures freshness
+> - **Stale-While-Revalidate:** Balance between speed and freshness
+> [Caching strategies deep dive →](https://web.dev/articles/offline-cookbook)
+
 Create advanced caching strategies:
 
 > **🤖 Continue Prompt:**
@@ -114,7 +122,12 @@ self.addEventListener('sync', (event) => {
 });
 ```
 
+> 💡 **Background Sync:** Guarantees message delivery even if app is closed. Retries automatically when connection returns. [Background Sync API →](https://developer.chrome.com/docs/capabilities/periodic-background-sync)
+```
+
 ## Part 4: Create Offline Queue
+
+> 💡 **Offline-First Architecture:** Queue + sync ensures zero message loss. IndexedDB persists queue across sessions. Exponential backoff prevents server overload (2s, 4s, 8s...). [Offline patterns →](https://developers.google.com/web/fundamentals/instant-and-offline/offline-cookbook)
 
 Implement message queueing for offline scenarios:
 
@@ -147,6 +160,8 @@ class OfflineQueue {
 ```
 
 ## Part 5: Add Update Notifications
+
+> 💡 **Update Strategy:** `autoUpdate` ensures users always have latest version. Skip-waiting pattern minimizes downtime. Critical for fixing bugs in production. [Service Worker lifecycle →](https://web.dev/articles/service-worker-lifecycle)
 
 Notify users when app updates are available:
 
@@ -248,6 +263,8 @@ Visual indicators:
 
 ## Part 8: Optimize Service Worker
 
+> 💡 **Cache Management:** Limiting cache size prevents storage bloat. 7-day expiration balances freshness with performance. Cache warming pre-loads critical paths. [Cache storage best practices →](https://web.dev/articles/cache-api-quick-guide)
+
 Fine-tune caching for performance:
 
 > **🤖 Continue Prompt:**
@@ -341,10 +358,12 @@ Note: Not all browsers support background sync.
 ## Performance Metrics
 
 ### Target Metrics
-- **Time to Install:** < 5 seconds
-- **Offline Load Time:** < 1 second
-- **Cache Size:** < 5MB
-- **Update Check:** Every 60 seconds
+- **Time to Install:** < 5 seconds (network dependent)
+- **Offline Load Time:** < 1 second (from cache)
+- **Cache Size:** < 5MB (respects quota)
+- **Update Check:** Every 60 seconds (configurable)
+
+> 💡 **Why These Targets?** 1-second load maintains user engagement. 5MB cache works on low-end devices. 60-second checks balance freshness with battery life. [Performance budgets guide →](https://web.dev/articles/performance-budgets-101)
 
 ### Monitoring
 
@@ -379,12 +398,15 @@ Your chat app now rivals native apps in functionality! Next, we'll add real-time
 
 1. **Push Notifications:**
    > Add push notification support for new messages
+   > 💡 **Requires:** VAPID keys, notification permission, push server. [Web Push protocol →](https://web.dev/articles/push-notifications-overview)
 
 2. **Share Target:**
    > Register as a share target to receive shared text
+   > 💡 **Web Share Target API:** Allows PWA to receive shared content like native apps. [Share Target API →](https://web.dev/articles/web-share-target)
 
 3. **Shortcuts:**
    > Add app shortcuts for quick actions
+   > 💡 **App Shortcuts:** Long-press app icon for quick actions. Defined in manifest. [Shortcuts guide →](https://web.dev/articles/app-shortcuts)
 
 ## Resources
 
