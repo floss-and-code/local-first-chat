@@ -22,6 +22,8 @@ In this step:
 
 ## Part 1: Create the Authentication Module
 
+> 💡 **Local-First Auth:** No server = no passwords to leak. We use cryptographically secure tokens via Web Crypto API for session management. [Web Crypto API guide →](https://developer.mozilla.org/en-US/docs/Web/API/Web_Crypto_API)
+
 Let's build a simple, secure authentication system that works entirely in the browser:
 
 > **🤖 Continue Prompt:**
@@ -59,6 +61,10 @@ class AuthManager {
 
 ## Part 2: Implement IndexedDB Storage
 
+> 💡 **Why IndexedDB?** Unlike localStorage's 5-10MB limit, IndexedDB offers 50% of available disk space. It's async, supports transactions, and handles binary data. [IndexedDB concepts →](https://web.dev/articles/indexeddb)
+
+> 💡 **Compression Strategy:** LZ-String reduces text by 40-60% using LZ78. Critical for mobile data savings. [Compression algorithms comparison →](https://caniuse.com/mdn-api_compressionstream)
+
 Create a robust storage layer with compression:
 
 > **🤖 Continue Prompt:**
@@ -74,11 +80,15 @@ Create a robust storage layer with compression:
 > ```
 
 Key features to implement:
-- Automatic compression for messages > 100 characters
-- Pagination support for large message histories
-- Error recovery with exponential backoff
+- Automatic compression for messages > 100 characters (saves ~50% storage)
+- Pagination support for large message histories (prevents UI blocking)
+- Error recovery with exponential backoff (handles quota exceeded gracefully)
+
+> 💡 **Storage Limits:** Most browsers allow 50% of free disk space for IndexedDB. [Browser storage quotas →](https://web.dev/articles/storage-for-the-web#how_much_can_i_store)
 
 ## Part 3: Build the Chat UI
+
+> 💡 **Virtual Scrolling:** Renders only visible messages, keeping DOM nodes < 100 even with 10,000 messages. Essential for mobile performance. [Virtual scrolling patterns →](https://web.dev/articles/virtualize-lists)
 
 Create the main chat interface:
 
@@ -130,9 +140,11 @@ Design a clean, mobile-optimized interface:
 > ```
 
 Key design principles:
-- Minimize repaints/reflows
-- Use CSS containment for performance
-- Hardware-accelerated animations only
+- Minimize repaints/reflows (use `transform` not `top/left`)
+- Use CSS containment for performance (`contain: layout style paint`)
+- Hardware-accelerated animations only (`transform`, `opacity`)
+
+> 💡 **CSS Performance:** Containment can improve rendering by 20-30% on mobile. [CSS containment explained →](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_containment)
 
 ## Part 5: Wire Everything Together
 
@@ -286,10 +298,14 @@ console.log('Compressed size:', compressed.length);
 - Remove unused imports
 - Use dynamic imports for large features
 
-### Performance
-- Implement virtual scrolling for > 50 messages
-- Debounce input events
-- Use `requestAnimationFrame` for UI updates
+> 💡 **Tree Shaking:** ES6 modules enable dead code elimination. Named exports are better than default exports for tree shaking. [Webpack tree shaking guide →](https://webpack.js.org/guides/tree-shaking/)
+
+### Performance  
+- Implement virtual scrolling for > 50 messages (reduces DOM nodes by 95%)
+- Debounce input events (300ms typical for search)
+- Use `requestAnimationFrame` for UI updates (syncs with browser's 60fps)
+
+> 💡 **RAF Benefits:** Prevents layout thrashing and ensures smooth 60fps animations. [requestAnimationFrame explained →](https://developer.mozilla.org/en-US/docs/Web/API/window/requestAnimationFrame)
 
 ## What You've Accomplished
 
@@ -321,12 +337,15 @@ Want to go further? Try these enhancements:
 
 1. **Add Emoji Support:**
    > Use Continue to add an emoji picker using Unicode emojis only
+   > 💡 **Unicode vs Images:** Unicode emojis are 0KB extra vs 100KB+ for image sets. [Emoji support table →](https://caniuse.com/mdn-api_fontface)
 
 2. **Message Timestamps:**
    > Add relative timestamps (e.g., "2 min ago")
+   > 💡 **Intl.RelativeTimeFormat:** Native API for relative times, no library needed. [Intl API guide →](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/RelativeTimeFormat)
 
 3. **Typing Indicators:**
    > Show when someone is typing (local only for now)
+   > 💡 **Debouncing:** Essential to avoid excessive updates. 1-2 second delay typical. [Debouncing patterns →](https://www.freecodecamp.org/news/javascript-debounce-example/)
 
 ---
 
