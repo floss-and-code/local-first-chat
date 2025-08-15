@@ -22,6 +22,8 @@ In this step:
 
 ## Part 1: Create WebSocket Server
 
+> 💡 **WebSocket vs HTTP:** Full-duplex communication with 98% less overhead than polling. Single TCP connection for bidirectional data flow. [WebSocket protocol RFC 6455 →](https://datatracker.ietf.org/doc/html/rfc6455)
+
 Build a lightweight WebSocket server:
 
 > **🤖 Continue Prompt:**
@@ -63,6 +65,9 @@ class ChatServer {
 }
 ```
 
+> 💡 **Rate Limiting:** 10 msg/sec prevents spam while allowing natural conversation. Heartbeat (ping/pong) detects stale connections within 30 seconds. [WebSocket heartbeat pattern →](https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API/Writing_WebSocket_servers#pings_and_pongs_the_heartbeat_of_websockets)
+```
+
 Add server dependencies:
 
 ```bash
@@ -81,6 +86,8 @@ Update package.json scripts:
 > ```
 
 ## Part 2: Create WebSocket Client
+
+> 💡 **Reconnection Strategy:** Exponential backoff (1s, 2s, 4s, 8s, 16s) prevents server overload during outages. Max 5 attempts before giving up. [Exponential backoff algorithm →](https://cloud.google.com/iot/docs/how-tos/exponential-backoff)
 
 Implement robust client-side WebSocket:
 
@@ -119,6 +126,8 @@ class WebSocketClient {
 ```
 
 ## Part 3: Integrate WebSocket with Chat
+
+> 💡 **Local-First Sync:** Save locally first ensures zero message loss. WebSocket sends when available, queue handles offline. This pattern provides instant UI feedback. [Local-first software principles →](https://www.inkandswitch.com/local-first/)
 
 Connect WebSocket to your existing chat:
 
@@ -170,6 +179,8 @@ Show who's online:
 > ```
 
 ## Part 5: Implement Message Sync
+
+> 💡 **Sync Challenges:** Network delays cause out-of-order delivery. UUID deduplication prevents duplicates. Timestamp reconciliation handles clock skew. [Distributed systems time →](https://www.cockroachlabs.com/blog/living-without-atomic-clocks/)
 
 Synchronize messages across devices:
 
@@ -380,10 +391,12 @@ console.log('Compressed:', LZString.compress(text).length);
 ## Performance Metrics
 
 ### Target Benchmarks
-- **Connection Time:** < 500ms
-- **Message Latency:** < 100ms
-- **Reconnect Time:** < 2 seconds
-- **Memory per Connection:** < 1MB
+- **Connection Time:** < 500ms (TCP handshake + WS upgrade)
+- **Message Latency:** < 100ms (regional, <20ms local)
+- **Reconnect Time:** < 2 seconds (first retry attempt)
+- **Memory per Connection:** < 1MB (scales to 10K connections/GB)
+
+> 💡 **WebSocket Scaling:** Each connection uses ~50-100KB RAM. Node.js can handle 10K+ concurrent connections per core. [WebSocket scaling patterns →](https://blog.sessionstack.com/how-javascript-works-deep-dive-into-websockets-and-http-2-with-sse-how-to-pick-the-right-path-584e6b8e3bf7)
 
 ### Monitoring
 
@@ -419,12 +432,15 @@ Your app now rivals commercial chat applications! Next, we'll optimize for produ
 
 1. **Voice Messages:**
    > Add compressed audio messages using WebRTC
+   > 💡 **Opus Codec:** 6-32 kbps for voice, 70% size reduction. [WebRTC audio codecs →](https://webrtc.org/getting-started/media-capture-and-constraints)
 
 2. **File Sharing:**
    > Implement chunked file transfer over WebSocket
+   > 💡 **Chunking Strategy:** 64KB chunks balance memory and latency. Base64 adds 33% overhead. [Binary WebSocket data →](https://developer.mozilla.org/en-US/docs/Web/API/WebSocket/send)
 
 3. **End-to-End Encryption:**
    > Add E2E encryption using Web Crypto API
+   > 💡 **Signal Protocol:** Double Ratchet algorithm for forward secrecy. AES-GCM for symmetric encryption. [Web Crypto E2E patterns →](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto)
 
 ## Debugging Tools
 
