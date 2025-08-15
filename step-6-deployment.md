@@ -28,6 +28,8 @@ Choose your preferred platform:
 
 ### Option A: Vercel (Recommended)
 
+> 💡 **Why Vercel?** Edge network with 100+ PoPs globally. Automatic HTTPS, instant cache invalidation, and serverless functions. Free tier handles 100GB bandwidth. [Vercel architecture →](https://vercel.com/docs/concepts/how-vercel-works)
+
 #### Part 1: Deploy Frontend
 
 > **🤖 Continue Prompt:**
@@ -81,6 +83,8 @@ vercel env add VITE_WS_URL production
 
 #### Part 2: Deploy WebSocket Server
 
+> 💡 **WebSocket Hosting:** Railway supports persistent connections, unlike serverless platforms. Auto-scales based on CPU/memory. $5/month handles ~1000 concurrent users. [Railway WebSocket guide →](https://docs.railway.app/deploy/deployments#websocket-support)
+
 > **🤖 Continue Prompt:**
 > ```
 > Deploy WebSocket server to Railway:
@@ -92,6 +96,8 @@ vercel env add VITE_WS_URL production
 > ```
 
 ### Option B: Netlify
+
+> 💡 **Netlify Features:** Built-in forms, serverless functions, split testing. Edge handlers for A/B tests. 100GB bandwidth free tier. [Netlify vs Vercel comparison →](https://www.netlify.com/blog/netlify-vs-vercel-a-comparison/)
 
 #### Setup Netlify Deployment
 
@@ -141,6 +147,8 @@ netlify deploy --prod
 
 ### Option C: Self-Hosted
 
+> 💡 **Self-Hosting Benefits:** Full control, no vendor lock-in, unlimited bandwidth. Costs ~$5/month on DigitalOcean. Requires DevOps knowledge. [Docker production guide →](https://docs.docker.com/get-started/09_image_best/)
+
 #### Docker Deployment
 
 > **🤖 Continue Prompt:**
@@ -173,6 +181,8 @@ CMD ["nginx", "-g", "daemon off;"]
 
 ## Part 3: Domain Configuration
 
+> 💡 **DNS Propagation:** Takes 0-48 hours globally. Use DNS checker tools. Cloudflare DNS is fastest (1.1.1.1). [DNS propagation checker →](https://www.whatsmydns.net/)
+
 Configure custom domain:
 
 > **🤖 Continue Prompt:**
@@ -196,6 +206,8 @@ CNAME   ws      your-ws-server.railway.app
 ```
 
 ## Part 4: Monitoring Setup
+
+> 💡 **Monitoring Stack:** Sentry captures 95% of JS errors. 0.1% sampling keeps costs low. Plausible is GDPR-compliant, no cookie banner needed. [Error monitoring best practices →](https://docs.sentry.io/platforms/javascript/best-practices/)
 
 Add production monitoring:
 
@@ -329,6 +341,8 @@ Configure security headers:
 ```
 
 ## Part 9: Load Testing
+
+> 💡 **Load Testing Goals:** Find breaking point before users do. 1000 concurrent = small chat app. WebSocket uses 50KB RAM per connection. [k6 WebSocket testing →](https://k6.io/docs/using-k6/protocols/websockets/)
 
 Test production capacity:
 
@@ -464,6 +478,8 @@ Requirements:
 | Active Users | - | Sudden drop |
 | WebSocket Connections | - | > 80% capacity |
 
+> 💡 **SLA Math:** 99.9% uptime = 43 minutes downtime/month. 99.99% = 4 minutes. Each 9 costs 10x more. [Uptime calculator →](https://uptime.is/)
+
 ## Post-Deployment Tasks
 
 1. **Share with users:**
@@ -498,23 +514,25 @@ Your chat app is production-ready and accessible worldwide!
 ### Enhance Your App
 
 1. **Add Features:**
-   - Video/Audio calls
-   - File sharing
-   - Reactions/Emojis
-   - Read receipts
-   - Typing indicators
+   - Video/Audio calls (WebRTC, adds ~100KB)
+   - File sharing (chunked upload, S3 storage)
+   - Reactions/Emojis (Unicode, 0KB extra)
+   - Read receipts (WebSocket events)
+   - Typing indicators (debounced, 1-2s delay)
 
 2. **Scale Up:**
-   - Redis for sessions
-   - PostgreSQL for persistence
-   - CDN for assets
-   - Multiple server regions
+   - Redis for sessions (handles 100K ops/sec)
+   - PostgreSQL for persistence (JSONB for messages)
+   - CDN for assets (CloudFlare free tier)
+   - Multiple server regions (< 100ms latency globally)
 
 3. **Monetization:**
-   - Premium features
-   - Team workspaces
-   - Storage limits
-   - Custom themes
+   - Premium features ($5-10/month typical)
+   - Team workspaces (Slack model)
+   - Storage limits (10GB free, then pay)
+   - Custom themes (one-time purchase)
+
+> 💡 **Scaling Path:** Start with single server → add Redis → add DB → multi-region. Each step 10x capacity. [Scaling WebSocket apps →](https://ably.com/topic/scaling-websocket-connections)
 
 ## Resources
 
