@@ -22,6 +22,8 @@ In this step:
 
 ## Part 1: Error Handling System
 
+> 💡 **Error Recovery:** Different error types need different strategies. Network errors = retry. Storage errors = clear cache. Auth errors = re-login. [Error handling best practices →](https://web.dev/articles/errors-and-error-handling)
+
 Create a robust error handling system:
 
 > **🤖 Continue Prompt:**
@@ -61,6 +63,8 @@ class ErrorHandler {
 
 ## Part 2: Bundle Optimization
 
+> 💡 **50KB Target:** Average mobile JS parse time is 1ms/KB. 50KB = 50ms parse. Terser removes 30-50% of code size. Brotli compresses 20% better than gzip. [JavaScript performance cost →](https://v8.dev/blog/cost-of-javascript-2019)
+
 Minimize bundle size aggressively:
 
 > **🤖 Continue Prompt:**
@@ -86,11 +90,11 @@ Build targets:
 ```typescript
 // vite.config.ts
 build: {
-  target: 'es2020',
+  target: 'es2020',  // 95% browser support, no polyfills needed
   minify: 'terser',
   terserOptions: {
     compress: {
-      drop_console: true,
+      drop_console: true,  // Removes ~2-5KB
       drop_debugger: true,
       pure_funcs: ['console.log']
     }
@@ -98,14 +102,19 @@ build: {
   rollupOptions: {
     output: {
       manualChunks: {
-        'vendor': ['lz-string', 'idb'],
+        'vendor': ['lz-string', 'idb'],  // Separate vendor chunk for caching
       }
     }
   }
 }
 ```
 
+> 💡 **Code Splitting:** Vendor chunks change rarely, cache forever. App chunks change often, cache with version. [HTTP caching strategies →](https://web.dev/articles/http-cache)
+```
+
 ## Part 3: Performance Monitoring
+
+> 💡 **Core Web Vitals:** LCP < 2.5s (good), FID < 100ms (responsive), CLS < 0.1 (stable). These metrics correlate with user satisfaction. [Web Vitals explained →](https://web.dev/articles/vitals)
 
 Add performance tracking:
 
@@ -163,6 +172,8 @@ export const config = {
 
 ## Part 5: Lazy Loading
 
+> 💡 **Dynamic Imports:** Load admin panel only when needed (saves ~10KB). Emoji picker loads on first use (saves ~20KB). Critical path stays under 30KB. [Code splitting patterns →](https://web.dev/articles/code-splitting-suspense)
+
 Implement code splitting:
 
 > **🤖 Continue Prompt:**
@@ -186,6 +197,8 @@ const AdminPanel = lazy(() => import('./admin'));
 ```
 
 ## Part 6: Memory Management
+
+> 💡 **Memory Limits:** Mobile browsers kill tabs using >100MB. Virtual scrolling keeps DOM under 100 nodes. WeakMap allows garbage collection of unused data. [Memory management guide →](https://developer.chrome.com/docs/devtools/memory-problems)
 
 Optimize memory usage:
 
@@ -232,6 +245,8 @@ class NetworkOptimizer {
 ```
 
 ## Part 8: Security Hardening
+
+> 💡 **Security Layers:** CSP prevents XSS attacks. DOMPurify sanitizes user input. WSS encrypts data in transit. SRI verifies external scripts. [OWASP security guide →](https://cheatsheetseries.owasp.org/cheatsheets/HTML5_Security_Cheat_Sheet.html)
 
 Add security measures:
 
@@ -362,6 +377,8 @@ Profile in DevTools:
 | Memory Usage | < 50MB | ___MB |
 | Lighthouse Score | > 95 | ___ |
 
+> 💡 **Why These Targets?** 3G users experience 200ms RTT. 50KB downloads in 2s on slow 3G. Sub-3s TTI maintains engagement. [Mobile performance research →](https://www.thinkwithgoogle.com/marketing-strategies/app-and-mobile/mobile-page-speed-new-industry-benchmarks/)
+
 ## What You've Accomplished
 
 🏆 Outstanding! Your app is now production-ready with:
@@ -384,12 +401,15 @@ Your chat app is ready for deployment! Let's deploy it next.
 
 1. **WebAssembly Compression:**
    > Use WASM for faster compression
+   > 💡 **WASM Benefits:** 2-10x faster than JS for compression. Brotli WASM is 4x faster than JS implementation. [WASM use cases →](https://webassembly.org/docs/use-cases/)
 
 2. **Edge Caching:**
    > Implement edge worker for global CDN
+   > 💡 **Edge Computing:** <50ms latency worldwide. Cloudflare Workers or Vercel Edge. [Edge functions guide →](https://vercel.com/docs/functions/edge-functions)
 
 3. **A/B Testing:**
    > Add feature flags for gradual rollout
+   > 💡 **Feature Flags:** Test with 1% of users first. Roll back instantly if issues. [Feature flag patterns →](https://martinfowler.com/articles/feature-toggles.html)
 
 ## Monitoring Tools
 
